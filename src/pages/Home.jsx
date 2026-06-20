@@ -2,30 +2,12 @@ import "../css/global.css";
 import "../css/home.css";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import { Link } from "react-router-dom";
+import { products } from "../data/products";
+
 
 function Home() {
-  const products = [
-  {
-    title: "Dell Laptop",
-    price: "₹20,000",
-    location: "Hostel 7",
-    image: "https://assets.thehansindia.com/h-upload/2023/04/26/1348625-dell.webp"
-  },
-
-  {
-    title: "Headphones",
-    price: "₹1,000",
-    location: "Hostel 5",
-    image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=1200&auto=format&fit=crop"
-  },
-
-  {
-    title: "Shoes",
-    price: "₹500",
-    location: "Hostel 3",
-    image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=1200&auto=format&fit=crop"
-  }
-];
+  
   return (
     <>
       {/* Navbar */}
@@ -112,9 +94,9 @@ function Home() {
 
     <div className="product-grid">
 
-     {products.map((product) => (
+     {products.slice(0,3).map((product) => (
 
-    <div className="product-card">
+    <div className="product-card" key={product.id}>
 
       <img
         src={product.image}
@@ -133,10 +115,12 @@ function Home() {
           {product.location}
         </div>
 
-        <a href="#" className="view-btn">
-          View Details
-        </a>
-
+        <Link
+        to={`/product/${product.id}`}
+        className="view-btn"
+      >
+       View Details
+      </Link>
       </div>
 
     </div>

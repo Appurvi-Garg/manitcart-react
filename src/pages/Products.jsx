@@ -3,9 +3,26 @@ import Footer from "../components/Footer";
 import "../css/global.css";
 import "../css/products.css";
 import { products } from "../data/products";
+import { Link } from "react-router-dom";
+import { useState } from "react";
 
 function Products() {
-  
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("All");
+  const filteredProducts = products.filter((product) => {
+
+  const matchesSearch =
+    product.title
+      .toLowerCase()
+      .includes(searchTerm.toLowerCase());
+
+  const matchesCategory =
+    selectedCategory === "All" ||
+    product.category === selectedCategory;
+
+  return matchesSearch && matchesCategory;
+
+});
   return (
     <>
       <Navbar />
@@ -38,8 +55,15 @@ function Products() {
   <div className="container top-filters">
 
     <div className="filter-box">
-      🔍 Search Products
-    </div>
+
+  <input
+    type="text"
+    placeholder="Search Products..."
+    value={searchTerm}
+    onChange={(e) => setSearchTerm(e.target.value)}
+  />
+
+</div>
 
     <div className="filter-box">
       📂 All Categories
@@ -81,25 +105,50 @@ function Products() {
 
     <div className="chips">
 
-      <div className="chip active">
+      <div
+       className={`chip ${
+       selectedCategory === "All" ? "active" : ""
+      }`}
+       onClick={() => setSelectedCategory("All")}
+      >
         All
       </div>
 
-      <div className="chip">
-        Electronics
-      </div>
+      <div
+  className={`chip ${
+    selectedCategory === "Electronics" ? "active" : ""
+  }`}
+  onClick={() => setSelectedCategory("Electronics")}
+>
+  Electronics
+</div>
 
-      <div className="chip">
-        Books
-      </div>
+      <div
+  className={`chip ${
+    selectedCategory === "Fashion" ? "active" : ""
+  }`}
+  onClick={() => setSelectedCategory("Fashion")}
+>
+  Fashion
+</div>
 
-      <div className="chip">
-        Cycles
-      </div>
+      <div
+  className={`chip ${
+    selectedCategory === "Cycles" ? "active" : ""
+  }`}
+  onClick={() => setSelectedCategory("Cycles")}
+>
+  Cycles
+</div>
 
-      <div className="chip">
-        Hostel Items
-      </div>
+      <div
+  className={`chip ${
+    selectedCategory === "Hostel Items" ? "active" : ""
+  }`}
+  onClick={() => setSelectedCategory("Hostel Items")}
+>
+  Hostel Items
+</div>
 
     </div>
 
@@ -115,8 +164,7 @@ function Products() {
     </div>
     <div className="products-grid">
 
-  {products.map((product) => (
-
+ {filteredProducts.map((product) => (
     <div className="product-card">
 
       <img
@@ -144,9 +192,12 @@ function Products() {
 
         <br />
 
-        <a href="#" className="view-btn">
-          View Details
-        </a>
+        <Link
+          to={`/product/${product.id}`}
+          className="view-btn"
+          >
+         View Details
+        </Link>
 
       </div>
 
