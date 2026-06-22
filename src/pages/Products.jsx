@@ -4,12 +4,27 @@ import "../css/global.css";
 import "../css/products.css";
 import { products } from "../data/products";
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 function Products() {
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("All");
-  const filteredProducts = products.filter((product) => {
+const [selectedCategory, setSelectedCategory] = useState("All");
+
+const [allProducts, setAllProducts] = useState(products);
+useEffect(() => {
+
+  const savedProducts =
+    JSON.parse(
+      localStorage.getItem("products")
+    ) || [];
+
+  setAllProducts([
+    ...products,
+    ...savedProducts
+  ]);
+
+}, []);
+  const filteredProducts = allProducts.filter((product) => {
 
   const matchesSearch =
     product.title

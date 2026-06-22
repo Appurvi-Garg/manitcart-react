@@ -102,6 +102,19 @@ const [imageUrl, setImageUrl] = useState("");
     };
 
     console.log(newProduct);
+    const existingProducts =
+  JSON.parse(
+    localStorage.getItem("products")
+  ) || [];
+
+  existingProducts.push(newProduct);
+
+localStorage.setItem(
+  "products",
+  JSON.stringify(existingProducts)
+);
+
+console.log(existingProducts);
      setTitle("");
   setPrice("");
   setCategory("");

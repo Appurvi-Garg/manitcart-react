@@ -27,14 +27,7 @@
   resize:vertical;
 }
 
-.sell-form button{
-  width:100%;
-  padding:14px;
-  border:none;
-  border-radius:10px;
-  cursor:pointer;
-  font-size:16px;
-}
+
 .sell-form button{
   width:100%;
   padding:14px;
@@ -50,6 +43,8 @@
 .sell-form button:hover{
   opacity:0.9;
 }
+
+
 .preview-image{
   width:100%;
   max-height:300px;
