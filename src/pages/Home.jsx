@@ -29,13 +29,19 @@ function Home() {
             </p>
 
             <div className="hero-buttons">
-              <a href="#" className="primary-btn">
-                Browse Items
-              </a>
+              <Link
+  to="/products"
+  className="primary-btn"
+>
+  Browse Items
+</Link>
 
-              <a href="#" className="secondary-btn">
-                Sell Your Item
-              </a>
+              <Link
+  to="/sell"
+  className="secondary-btn"
+>
+  Sell Your Item
+</Link>
             </div>
           </div>
 

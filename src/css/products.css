@@ -219,6 +219,11 @@
       color:#5b3df5;
       font-weight:600;
     }
+    /* product count */
+    .product-count{
+  margin-bottom:20px;
+  font-weight:600;
+}
 
     /* PRODUCT GRID */
 
@@ -288,6 +293,14 @@
       border-radius:12px;
       font-weight:600;
     }
+    .delete-btn{
+  width:100%;
+  margin-top:10px;
+  padding:10px;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+}
 
     /* FOOTER */
 

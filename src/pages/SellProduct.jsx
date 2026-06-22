@@ -9,7 +9,8 @@ const [price, setPrice] = useState("");
 const [category, setCategory] = useState("");
 const [location, setLocation] = useState("");
 const [description, setDescription] = useState("");
-const [imageUrl, setImageUrl] = useState("");
+const [image, setImage] = useState("");
+const [message, setMessage] = useState("");
 
   return (
     <>
@@ -38,15 +39,12 @@ const [imageUrl, setImageUrl] = useState("");
 
   <br /><br />
 
-  <select
-    value={category}
-    onChange={(e) => setCategory(e.target.value)}
-  >
-    <option value="">Select Category</option>
-    <option value="Electronics">Electronics</option>
-    <option value="Fashion">Fashion</option>
-    <option value="Hostel Items">Hostel Items</option>
-  </select>
+  <input
+  type="text"
+  placeholder="Category"
+  value={category}
+  onChange={(e) => setCategory(e.target.value)}
+/>
 
   <br /><br />
 
@@ -66,23 +64,38 @@ const [imageUrl, setImageUrl] = useState("");
 
 <br /><br />
 <input
-  type="text"
-  placeholder="Image URL"
-  value={imageUrl}
-  onChange={(e) => setImageUrl(e.target.value)}
+  type="file"
+  accept="image/*"
+  onChange={(e) => {
+
+    const file = e.target.files[0];
+
+    if (!file) return;
+
+    const reader = new FileReader();
+
+    reader.onloadend = () => {
+      setImage(reader.result);
+    };
+
+    reader.readAsDataURL(file);
+
+  }}
 />
 
 <br /><br />
-{imageUrl && (
+{image && (
   <img
-  src={imageUrl}
+  src={image}
   alt="Preview"
   className="preview-image"
 />
 )}
 
   <br /><br />
-
+  {message && (
+  <p>{message}</p>
+)}
  
 
   <button
@@ -93,12 +106,18 @@ const [imageUrl, setImageUrl] = useState("");
     }
 
     const newProduct = {
+      id: Date.now(),
       title,
       price,
       category,
       location,
       description,
-      imageUrl
+      image,
+      createdAt: new Date().toLocaleDateString(),
+       seller: {
+    name: "MANIT Student",
+     college: "MANIT Bhopal"
+  }
     };
 
     console.log(newProduct);
@@ -113,6 +132,10 @@ localStorage.setItem(
   "products",
   JSON.stringify(existingProducts)
 );
+setMessage("✅ Product Added Successfully");
+setTimeout(() => {
+  setMessage("");
+}, 3000);
 
 console.log(existingProducts);
      setTitle("");
@@ -120,7 +143,7 @@ console.log(existingProducts);
   setCategory("");
   setLocation("");
   setDescription("");
-  setImageUrl("");
+  setImage("");
 
 
   }}

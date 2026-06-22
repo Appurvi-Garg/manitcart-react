@@ -6,10 +6,23 @@ import { Link } from "react-router-dom";
 function ProductDetails() {
 
   const { id } = useParams();
-  const product = products.find(
+  const savedProducts =
+  JSON.parse(
+    localStorage.getItem("products")
+  ) || [];
+  
+const allProducts = [
+  ...products,
+  ...savedProducts
+];
+const product = allProducts.find(
   (p) => p.id === Number(id)
 );
-const similarProducts = products.filter(
+if (!product) {
+  return <h2>Product Not Found</h2>;
+}
+
+const similarProducts = allProducts.filter(
   (p) => p.id !== product.id
 );
 const [showPhone, setShowPhone] = useState(false);
@@ -68,12 +81,12 @@ const [wishlist, setWishlist] = useState(false);
 
     <div>
       <div className="seller-name">
-        {product.seller.name}
-      </div>
+  {product.seller?.name || "MANIT Student"}
+</div>
 
       <div className="seller-college">
-        {product.seller.college}
-      </div>
+  {product.seller?.college || "MANIT Bhopal"}
+</div>
     </div>
 
   </div>
@@ -88,8 +101,8 @@ const [wishlist, setWishlist] = useState(false);
 >
 
   {showPhone
-    ?  product.seller.phone
-    : "View Phone Number"}
+  ? product.seller?.phone || "9876543210"
+  : "View Phone Number"}
 
 </button>
 
@@ -121,13 +134,16 @@ const [wishlist, setWishlist] = useState(false);
 >
 
           <img
-            src={item.image}
-            alt={item.title}
-          />
+  src={item.image || item.imageUrl}
+  alt={item.title}
+/>
 
           <h4>{item.title}</h4>
 
           <p>{item.price}</p>
+          <p>
+  Posted on: {product.createdAt}
+</p>
 
         </Link>
 

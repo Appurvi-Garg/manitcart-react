@@ -24,6 +24,29 @@ useEffect(() => {
   ]);
 
 }, []);
+const handleDelete = (title) => {
+
+  const savedProducts =
+    JSON.parse(
+      localStorage.getItem("products")
+    ) || [];
+
+  const updatedProducts =
+    savedProducts.filter(
+      (product) => product.title !== title
+    );
+
+  localStorage.setItem(
+    "products",
+    JSON.stringify(updatedProducts)
+  );
+
+  setAllProducts([
+    ...products,
+    ...updatedProducts
+  ]);
+
+};
   const filteredProducts = allProducts.filter((product) => {
 
   const matchesSearch =
@@ -38,6 +61,14 @@ useEffect(() => {
   return matchesSearch && matchesCategory;
 
 });
+const categories = [
+  "All",
+  ...new Set(
+    allProducts.map(
+      product => product.category
+    )
+  )
+];
   return (
     <>
       <Navbar />
@@ -120,50 +151,23 @@ useEffect(() => {
 
     <div className="chips">
 
-      <div
-       className={`chip ${
-       selectedCategory === "All" ? "active" : ""
-      }`}
-       onClick={() => setSelectedCategory("All")}
-      >
-        All
-      </div>
+      {categories.map((category) => (
 
-      <div
-  className={`chip ${
-    selectedCategory === "Electronics" ? "active" : ""
-  }`}
-  onClick={() => setSelectedCategory("Electronics")}
->
-  Electronics
-</div>
+  <div
+    key={category}
+    className={`chip ${
+      selectedCategory === category
+        ? "active"
+        : ""
+    }`}
+    onClick={() =>
+      setSelectedCategory(category)
+    }
+  >
+    {category}
+  </div>
 
-      <div
-  className={`chip ${
-    selectedCategory === "Fashion" ? "active" : ""
-  }`}
-  onClick={() => setSelectedCategory("Fashion")}
->
-  Fashion
-</div>
-
-      <div
-  className={`chip ${
-    selectedCategory === "Cycles" ? "active" : ""
-  }`}
-  onClick={() => setSelectedCategory("Cycles")}
->
-  Cycles
-</div>
-
-      <div
-  className={`chip ${
-    selectedCategory === "Hostel Items" ? "active" : ""
-  }`}
-  onClick={() => setSelectedCategory("Hostel Items")}
->
-  Hostel Items
-</div>
+))}
 
     </div>
 
@@ -177,10 +181,19 @@ useEffect(() => {
       </a>
 
     </div>
+    <p className="product-count">
+  {filteredProducts.length} Products Found
+</p>
     <div className="products-grid">
 
- {filteredProducts.map((product) => (
-    <div className="product-card">
+ {filteredProducts.length === 0 ? (
+
+  <h3>No products found</h3>
+
+) : (filteredProducts.map((product) => (
+    <div
+     key={product.id} 
+    className="product-card">
 
       <img
         src={product.image}
@@ -213,12 +226,30 @@ useEffect(() => {
           >
          View Details
         </Link>
+        <button
+  className="delete-btn"
+  onClick={() => {
+
+    const confirmDelete =
+      window.confirm(
+        "Delete this product?"
+      );
+
+    if (confirmDelete) {
+      handleDelete(product.title);
+    }
+
+  }}
+>
+  Delete
+</button>
 
       </div>
 
     </div>
 
-  ))}
+  ))
+)}
 
 </div>
 
