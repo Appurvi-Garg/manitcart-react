@@ -4,9 +4,12 @@ function Navbar() {
     <nav>
       <div className="container nav-content">
 
-        <div className="logo">
-          MANITcart
-        </div>
+        <Link
+  to="/"
+  className="logo"
+>
+  MANITcart
+</Link>
 
         <div className="search-bar">
           <input
@@ -16,13 +19,27 @@ function Navbar() {
         </div>
 
         <div className="nav-links">
-          <a href="#categories">Categories</a>
-          <Link to="/sell">Sell</Link>
-          <a href="#">My Orders</a>
-          <a href="#" className="login-btn">
-            Login
-          </a>
-        </div>
+          <Link to="/">
+    Home
+  </Link>
+
+  <a href="#categories">
+    Categories
+  </a>
+
+  <Link to="/sell">
+    Sell
+  </Link>
+
+  <Link to="/my-listings">
+    My Listings
+  </Link>
+
+  <a href="#" className="login-btn">
+    Login
+  </a>
+
+</div>
 
       </div>
     </nav>

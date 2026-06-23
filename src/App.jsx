@@ -4,6 +4,7 @@ import Home from "./pages/Home";
 import Products from "./pages/Products";
 import ProductDetails from "./pages/ProductDetails";
 import SellProduct from "./pages/SellProduct";
+import MyListings from "./pages/MyListings";
 
 function App() {
   return (
@@ -30,6 +31,10 @@ function App() {
           path="/sell"
           element={<SellProduct />}
         />
+        <Route
+  path="/my-listings"
+  element={<MyListings />}
+/>
 
       </Routes>
 

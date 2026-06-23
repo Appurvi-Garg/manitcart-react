@@ -47,7 +47,11 @@ const handleDelete = (title) => {
   ]);
 
 };
-  const filteredProducts = allProducts.filter((product) => {
+
+const sortedProducts = [...allProducts].sort(
+  (a, b) => b.id - a.id
+);
+  const filteredProducts = sortedProducts.filter((product) => {
 
   const matchesSearch =
     product.title
@@ -64,7 +68,7 @@ const handleDelete = (title) => {
 const categories = [
   "All",
   ...new Set(
-    allProducts.map(
+    sortedProducts.map(
       product => product.category
     )
   )
@@ -201,6 +205,9 @@ const categories = [
       />
 
       <div className="card-content">
+        <div className="category-badge">
+  {product.category}
+</div>
 
         <div className="product-title">
           {product.title}
@@ -226,23 +233,7 @@ const categories = [
           >
          View Details
         </Link>
-        <button
-  className="delete-btn"
-  onClick={() => {
-
-    const confirmDelete =
-      window.confirm(
-        "Delete this product?"
-      );
-
-    if (confirmDelete) {
-      handleDelete(product.title);
-    }
-
-  }}
->
-  Delete
-</button>
+        
 
       </div>
 
