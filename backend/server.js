@@ -1,3 +1,4 @@
+const connectDB = require("./db");
 const express = require("express");
 
 const app = express();
@@ -35,6 +36,28 @@ app.post("/products", (req, res) => {
   });
 
 });
+app.delete("/products/:id", (req, res) => {
+
+  const id = Number(req.params.id);
+
+  const productIndex = products.findIndex(
+    (product) => product.id === id
+  );
+
+  if (productIndex === -1) {
+    return res.status(404).json({
+      message: "Product Not Found"
+    });
+  }
+
+  products.splice(productIndex, 1);
+
+  res.json({
+    message: "Product Deleted"
+  });
+
+});
+connectDB();
 app.listen(5000, () => {
   console.log("Server running on port 5000");
 });
