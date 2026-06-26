@@ -9,33 +9,67 @@ function MyListings()
   const [myProducts, setMyProducts] = useState([]);
   useEffect(() => {
 
-  const savedProducts =
-    JSON.parse(
-      localStorage.getItem("products")
-    ) || [];
+  const fetchMyProducts = async () => {
 
-  setMyProducts(savedProducts);
+    try {
+
+      const response = await fetch(
+        "http://localhost:5000/products"
+      );
+
+      const data = await response.json();
+
+      setMyProducts(data);
+
+    } catch (error) {
+
+      console.log(error);
+
+    }
+
+  };
+
+  fetchMyProducts();
 
 }, []);
-const handleDelete = (id) => {
+const handleDelete = async (id) => {
 
-  if (!window.confirm("Delete this product?")) {
-    return;
-  }
-
-  const updatedProducts =
-    myProducts.filter(
-      (product) => product.id !== id
-    );
-
-  localStorage.setItem(
-    "products",
-    JSON.stringify(updatedProducts)
+  const confirmDelete = window.confirm(
+    "Delete this product?"
   );
 
-  setMyProducts(updatedProducts);
+  if (!confirmDelete) return;
+
+  try {
+
+    await fetch(
+      `http://localhost:5000/products/${id}`,
+      {
+        method: "DELETE",
+      }
+    );
+
+    setMyProducts(
+      myProducts.filter(
+        (product) => product._id !== id
+      )
+    );
+
+  } catch (error) {
+
+    console.log(error);
+
+  }
 
 };
+{myProducts.map((product) => (
+  <div
+    className="my-listing-card"
+    key={product._id}
+  >
+    ...
+  </div>
+))}
 
   return (
     <>
@@ -64,7 +98,7 @@ const handleDelete = (id) => {
 
         <div
           className="my-listing-card"
-          key={product.id}
+          key={product._id}
         >
 
           <img
@@ -87,7 +121,7 @@ const handleDelete = (id) => {
           </div>
           <button
   className="delete-btn"
-  onClick={() => handleDelete(product.id)}
+  onClick={() => handleDelete(product._id)}
 >
   Delete
 </button>

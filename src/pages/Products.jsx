@@ -2,7 +2,7 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import "../css/global.css";
 import "../css/products.css";
-import { products } from "../data/products";
+
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 
@@ -10,47 +10,35 @@ function Products() {
   const [searchTerm, setSearchTerm] = useState("");
 const [selectedCategory, setSelectedCategory] = useState("All");
 
-const [allProducts, setAllProducts] = useState(products);
+const [allProducts, setAllProducts] = useState([]);
 useEffect(() => {
 
-  const savedProducts =
-    JSON.parse(
-      localStorage.getItem("products")
-    ) || [];
+  const fetchProducts = async () => {
 
-  setAllProducts([
-    ...products,
-    ...savedProducts
-  ]);
+    try {
+
+      const response = await fetch(
+        "http://localhost:5000/products"
+      );
+
+      const data = await response.json();
+
+      setAllProducts(data);
+
+    } catch (error) {
+
+      console.log(error);
+
+    }
+
+  };
+
+  fetchProducts();
 
 }, []);
-const handleDelete = (title) => {
 
-  const savedProducts =
-    JSON.parse(
-      localStorage.getItem("products")
-    ) || [];
 
-  const updatedProducts =
-    savedProducts.filter(
-      (product) => product.title !== title
-    );
-
-  localStorage.setItem(
-    "products",
-    JSON.stringify(updatedProducts)
-  );
-
-  setAllProducts([
-    ...products,
-    ...updatedProducts
-  ]);
-
-};
-
-const sortedProducts = [...allProducts].sort(
-  (a, b) => b.id - a.id
-);
+const sortedProducts = [...allProducts];
   const filteredProducts = sortedProducts.filter((product) => {
 
   const matchesSearch =
@@ -196,7 +184,7 @@ const categories = [
 
 ) : (filteredProducts.map((product) => (
     <div
-     key={product.id} 
+     key={product._id} 
     className="product-card">
 
       <img
@@ -228,7 +216,7 @@ const categories = [
         <br />
 
         <Link
-          to={`/product/${product.id}`}
+          to={`/product/${product._id}`}
           className="view-btn"
           >
          View Details

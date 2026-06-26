@@ -1,22 +1,12 @@
 const Product = require("./models/Product");
 const connectDB = require("./db");
 const express = require("express");
+const cors = require("cors");
 
 const app = express();
 app.use(express.json());
+app.use(cors());
 
-const products = [
-  {
-    id: 1,
-    title: "HP Laptop",
-    price: 30000
-  },
-  {
-    id: 2,
-    title: "Cricket Bat",
-    price: 1200
-  }
-];
 
 
 
@@ -31,39 +21,39 @@ app.get("/products", async (req, res) => {
     });
   }
 });
-app.post("/products", (req, res) => {
+app.post("/products", async (req, res) => {
+  try {
+    const product = new Product(req.body);
 
-  const newProduct = req.body;
+    await product.save();
 
-  products.push(newProduct);
-
-  res.json({
-    message: "Product Added",
-    product: newProduct
-  });
-
-});
-app.delete("/products/:id", (req, res) => {
-
-  const id = Number(req.params.id);
-
-  const productIndex = products.findIndex(
-    (product) => product.id === id
-  );
-
-  if (productIndex === -1) {
-    return res.status(404).json({
-      message: "Product Not Found"
+    res.status(201).json(product);
+  } catch (error) {
+    res.status(500).json({
+      message: error.message,
     });
   }
-
-  products.splice(productIndex, 1);
-
-  res.json({
-    message: "Product Deleted"
-  });
-
 });
+app.delete("/products/:id", async (req, res) => {
+  try {
+    const deletedProduct = await Product.findByIdAndDelete(req.params.id);
+
+    if (!deletedProduct) {
+      return res.status(404).json({
+        message: "Product not found",
+      });
+    }
+
+    res.json({
+      message: "Product deleted successfully",
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: error.message,
+    });
+  }
+});
+  
 connectDB();
 app.listen(5000, () => {
   console.log("Server running on port 5000");

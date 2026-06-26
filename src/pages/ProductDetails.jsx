@@ -1,30 +1,13 @@
 import { useParams } from "react-router-dom";
-import { useState } from "react";
-import { products } from "../data/products";
+import { useState, useEffect } from "react";
+
 import "../css/productDetails.css";
 import { Link } from "react-router-dom";
 function ProductDetails() {
 
   const { id } = useParams();
-  const savedProducts =
-  JSON.parse(
-    localStorage.getItem("products")
-  ) || [];
-  
-const allProducts = [
-  ...products,
-  ...savedProducts
-];
-const product = allProducts.find(
-  (p) => p.id === Number(id)
-);
-if (!product) {
-  return <h2>Product Not Found</h2>;
-}
-
-const similarProducts = allProducts.filter(
-  (p) => p.id !== product.id
-);
+  const [product, setProduct] = useState(null);
+const [similarProducts, setSimilarProducts] = useState([]);
 const [showPhone, setShowPhone] = useState(false);
 const [wishlist, setWishlist] = useState(false);
 

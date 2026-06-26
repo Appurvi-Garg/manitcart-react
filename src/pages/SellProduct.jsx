@@ -99,14 +99,14 @@ const [message, setMessage] = useState("");
  
 
   <button
-  onClick={() => {
+  onClick={async () => {
     if (!title || !price || !category) {
       alert("Please fill all required fields");
       return;
     }
 
     const newProduct = {
-      id: Date.now(),
+      
       title,
       price,
       category,
@@ -121,23 +121,32 @@ const [message, setMessage] = useState("");
     };
 
     console.log(newProduct);
-    const existingProducts =
-  JSON.parse(
-    localStorage.getItem("products")
-  ) || [];
+    try {
 
-  existingProducts.push(newProduct);
+  const response = await fetch(
+    "http://localhost:5000/products",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newProduct),
+    }
+  );
 
-localStorage.setItem(
-  "products",
-  JSON.stringify(existingProducts)
-);
-setMessage("✅ Product Added Successfully");
-setTimeout(() => {
-  setMessage("");
-}, 3000);
+  const data = await response.json();
 
-console.log(existingProducts);
+  console.log(data);
+
+  setMessage("✅ Product Added Successfully");
+
+} catch (error) {
+
+  console.log(error);
+
+  setMessage("❌ Failed to add product");
+
+}
      setTitle("");
   setPrice("");
   setCategory("");
