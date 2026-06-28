@@ -5,7 +5,7 @@ import Products from "./pages/Products";
 import ProductDetails from "./pages/ProductDetails";
 import SellProduct from "./pages/SellProduct";
 import MyListings from "./pages/MyListings";
-
+import EditProduct from "./pages/EditProduct";
 function App() {
   return (
     <BrowserRouter>
@@ -31,12 +31,18 @@ function App() {
           path="/sell"
           element={<SellProduct />}
         />
+
+        <Route
+  path="/edit-product/:id"
+  element={<EditProduct />}
+/>
         <Route
   path="/my-listings"
   element={<MyListings />}
 />
 
       </Routes>
+      
 
     </BrowserRouter>
   );

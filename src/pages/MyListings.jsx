@@ -3,10 +3,12 @@ import Footer from "../components/Footer";
 import { useState, useEffect } from "react";
 import "../css/global.css";
 import "../css/myListings.css";
+import { useNavigate } from "react-router-dom";
 
 function MyListings() 
 {
   const [myProducts, setMyProducts] = useState([]);
+  const navigate = useNavigate();
   useEffect(() => {
 
   const fetchMyProducts = async () => {
@@ -119,6 +121,12 @@ const handleDelete = async (id) => {
             </p>
 
           </div>
+          <button
+  className="edit-btn"
+  onClick={() => navigate(`/edit-product/${product._id}`)}
+>
+  Edit
+</button>
           <button
   className="delete-btn"
   onClick={() => handleDelete(product._id)}

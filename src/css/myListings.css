@@ -116,3 +116,22 @@
   color:#666;
   margin-bottom:25px;
 }
+/* edit button */
+.edit-btn {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  background-color: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.edit-btn:hover {
+  background-color: #1d4ed8;
+  transform: translateY(-2px);
+}

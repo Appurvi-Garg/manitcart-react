@@ -10,6 +10,48 @@ function ProductDetails() {
 const [similarProducts, setSimilarProducts] = useState([]);
 const [showPhone, setShowPhone] = useState(false);
 const [wishlist, setWishlist] = useState(false);
+useEffect(() => {
+
+  const fetchProduct = async () => {
+
+    try {
+
+      // Fetch selected product
+      const response = await fetch(
+        `http://localhost:5000/products/${id}`
+      );
+
+      const data = await response.json();
+
+      setProduct(data);
+
+      // Fetch all products
+      const response2 = await fetch(
+        "http://localhost:5000/products"
+      );
+
+      const allProducts = await response2.json();
+
+      setSimilarProducts(
+        allProducts.filter(
+          (item) => item._id !== data._id
+        )
+      );
+
+    } catch (error) {
+
+      console.log(error);
+
+    }
+
+  };
+
+  fetchProduct();
+
+}, [id]);
+if (!product) {
+  return <h2>Loading...</h2>;
+}
 
  return (
   <div className="container">
@@ -111,9 +153,9 @@ const [wishlist, setWishlist] = useState(false);
       {similarProducts.map((item) => (
 
         <Link
-         to={`/product/${item.id}`}
+         to={`/product/${item._id}`}
           className="similar-card"
-         key={item.id}
+         key={item._id}
 >
 
           <img
@@ -125,7 +167,7 @@ const [wishlist, setWishlist] = useState(false);
 
           <p>{item.price}</p>
           <p>
-  Posted on: {product.createdAt}
+  Posted on: {item.createdAt}
 </p>
 
         </Link>
