@@ -1,7 +1,9 @@
-import { useState } from "react";
+
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import "../css/sellProduct.css";
+import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 
 function EditProduct() {
   const [title, setTitle] = useState("");
@@ -11,6 +13,65 @@ const [location, setLocation] = useState("");
 const [description, setDescription] = useState("");
 const [image, setImage] = useState("");
 const [message, setMessage] = useState("");
+const { id } = useParams();
+useEffect(() => {
+
+    const fetchProduct = async () => {
+
+        const response = await fetch(
+            `http://localhost:5000/products/${id}`
+        );
+
+        const data = await response.json();
+
+        setTitle(data.title);
+setPrice(data.price);
+setCategory(data.category);
+setLocation(data.location);
+setDescription(data.description);
+setImage(data.image);
+
+    };
+
+    fetchProduct();
+
+}, [id]);
+
+const handleUpdate = async () => {
+
+  try {
+
+    const response = await fetch(
+      `http://localhost:5000/products/${id}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          title,
+          price,
+          category,
+          location,
+          description,
+          image,
+        }),
+      }
+    );
+
+    const updatedProduct = await response.json();
+
+    console.log(updatedProduct);
+
+    alert("Product Updated Successfully!");
+
+  } catch (error) {
+
+    console.log(error);
+
+  }
+
+};
 
   return (
     <>
@@ -98,66 +159,8 @@ const [message, setMessage] = useState("");
 )}
  
 
-  <button
-  onClick={async () => {
-    if (!title || !price || !category) {
-      alert("Please fill all required fields");
-      return;
-    }
-
-    const newProduct = {
-      
-      title,
-      price,
-      category,
-      location,
-      description,
-      image,
-      createdAt: new Date().toLocaleDateString(),
-       seller: {
-    name: "MANIT Student",
-     college: "MANIT Bhopal"
-  }
-    };
-
-    console.log(newProduct);
-    try {
-
-  const response = await fetch(
-    "http://localhost:5000/products",
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(newProduct),
-    }
-  );
-
-  const data = await response.json();
-
-  console.log(data);
-
-  setMessage("✅ Product Added Successfully");
-
-} catch (error) {
-
-  console.log(error);
-
-  setMessage("❌ Failed to add product");
-
-}
-     setTitle("");
-  setPrice("");
-  setCategory("");
-  setLocation("");
-  setDescription("");
-  setImage("");
-
-
-  }}
->
-  Submit Product
+  <button onClick={handleUpdate}>
+   Update Product
 </button>
 </div>
 </div>
