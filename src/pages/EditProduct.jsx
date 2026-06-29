@@ -3,7 +3,7 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import "../css/sellProduct.css";
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
 function EditProduct() {
   const [title, setTitle] = useState("");
@@ -14,6 +14,7 @@ const [description, setDescription] = useState("");
 const [image, setImage] = useState("");
 const [message, setMessage] = useState("");
 const { id } = useParams();
+const navigate = useNavigate();
 useEffect(() => {
 
     const fetchProduct = async () => {
@@ -64,6 +65,9 @@ const handleUpdate = async () => {
     console.log(updatedProduct);
 
     alert("Product Updated Successfully!");
+    setTimeout(() => {
+  navigate("/my-listings");
+}, 1000);
 
   } catch (error) {
 
